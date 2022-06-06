@@ -12,7 +12,6 @@ List of frameworks/librarys used to create this project:
 
 
 ## Getting Started
-To run the script, follow the steps below
 
 ### Prerequisites
 * [Google Chrome](https://www.google.com/chrome/)
@@ -21,23 +20,14 @@ To run the script, follow the steps below
 
 
 
-### Installation
-Open `engage_life.py` in an editor. Find the `#chrome options` section and edit the 2 lines to match your own chrome profile path.<br>
-*(your chrome profile path can be found at [chrome://version/](chrome://version/))*
-```python
-options.add_argument('--user-data-dir=...')
-options.add_argument('--profile-directory=...')
-```
 
 
 ## Usage
-Run `engage_life.py`
-```python
-py engage_life.py
-```
+
+### 1. Create touki_.xslx with sheet 'script' and headers 'text' & '#'
 
 
-## Contributing
+## Contributions
 Contributions are welcomed and greatly appreciated!
 
 If you have any suggestions, please fork the repo and create a pull request or open an issue. 
@@ -52,4 +42,4 @@ Distributed under the MOOSHKID License. See LICENSE.txt for more information.
 ## Authors
 Masa Yamanaka - yamanaka@lcom-group.jp
 
-Project Link: [https://github.com/mooshkid/lifecom](https://github.com/mooshkid/lifecom)
+Project Link: [https://github.com/mooshkid/lifecom_touki](https://github.com/mooshkid/lifecom_touki)
