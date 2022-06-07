@@ -13,7 +13,7 @@ import logging
 
 # logging config
 path = os.getcwd()
-logPath = os.path.join(path, "touki/touki_test.log")
+logPath = os.path.join(path, "touki_test.log")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -41,13 +41,13 @@ count = 0
 
 
 ##### CHANGE EXCEL PATH HERE #####
-excelPath = os.path.join(path, 'touki/touki_test.xlsx')
+excelPath = os.path.join(path, 'touki_test.xlsx')
 # dataframes
-df=pd.read_excel(excelPath, 'script', names=['text','#'])
+df=pd.read_excel(excelPath, sheet_name='script', usecols=['text', '#', 'region'])
 #error list
 error_list = []
 #error .txt
-with open(os.path.join(path, "touki/touki_error.txt"), 'a', encoding="utf-8") as f:
+with open(os.path.join(path, "touki_error.txt"), 'a', encoding="utf-8") as f:
     f.write("\n" + time.strftime("%B %d, %Y %H:%M:%S"))
 
 # chrome options !Remember to set options to YOUR profile (chrome://version)
@@ -82,14 +82,21 @@ realEstate.click()
 for i, row in df.iterrows():
     t = row['text']
     n = row['#']
+    r = row['region']
     tn = t + " " + n
     count += 1
     
     log.info('Starting(' + str(count) + '): ' + tn)
 
-    ##### SELECT STATE HERE ~/option[x] #####
-    selectState = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="fuTodofukenShozai"]/optgroup[3]/option[3]')))
-    selectState.click()
+##### SELECT STATE HERE ~/option[x] #####
+    # selectState = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="fuTodofukenShozai"]/optgroup[3]/option[3]')))
+    # selectState.click()
+
+
+##### ADSFHAKSDFASDKFHASDF
+    optionRegion = driver.find_element(By.XPATH, '//*[@id="fuTodofukenShozai"]/optgroup/*[contains(text(), "{}")]'.format(r))
+    optionRegion.click()
+
     # check input manually
     checkManual = driver.find_element(By.XPATH, '//*[@id="fuShozaiChokusetuNyuryoku"]').click()
     # address text box
@@ -144,7 +151,7 @@ for i, row in df.iterrows():
     except TimeoutException:
         log.warning('ADDRESS NOT FOUND: ' + tn)
         ### OUT PUT ERROR TO .TXT ###
-        with open(os.path.join(path, "touki/touki_error.txt"), 'a', encoding="utf-8") as f:
+        with open(os.path.join(path, "touki_error.txt"), 'a', encoding="utf-8") as f:
             f.write("\n" + tn)
         
         # add failed address to list
@@ -156,10 +163,10 @@ for i, row in df.iterrows():
 # log list of addresses not found
 log.info(str(len(error_list)) + ' Addresses NOT found: ' + str(error_list))
 
-nf = pd.DataFrame(error_list)
-excelErrorPath = os.path.join(path, 'touki/touki_error.xlsx')
-nf.to_excel(excelErrorPath)
-log.info(nf)
+# nf = pd.DataFrame(error_list)
+# excelErrorPath = os.path.join(path, 'touki_error.xlsx')
+# nf.to_excel(excelErrorPath)
+# log.info(nf)
 
 # elasped time 
 end = time.time()
