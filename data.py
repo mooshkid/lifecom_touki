@@ -2,7 +2,7 @@ import pandas as pd
 import glob, os
 
 # list of all excel files in directory 
-os.chdir(r"\\192.168.1.194\lifecom_share\011_営業\01_本社\06_権利MD送付\スクリプト\02_excel")
+os.chdir(r"\\192.168.1.194\lifecom_share\011_営業\01_本社\06_権利MD送付\スクリプト\03_excel")
 excelFiles = glob.glob("*.xlsx")
 # print(excelFiles)
 
@@ -33,5 +33,5 @@ for i in excelFiles:
 
 # convert the final dataframe to csv
 df = pd.DataFrame(dataAll)
-df.to_csv('../03_data/data.csv', header=['file', '設置住所', '所有者住所', '名前'], encoding='utf-8-sig', index=False)
+df.to_csv('../04_data/data.csv', header=['file', '設置住所', '所有者住所', '名前'], encoding='utf-8-sig', index=False)
 print(df)
