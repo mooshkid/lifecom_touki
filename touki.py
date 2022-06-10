@@ -13,7 +13,7 @@ import logging
 
 # logging config
 path = os.getcwd()
-logPath = os.path.join(path, "touki/touki.log")
+logPath = os.path.join(path, "Logs/touki.log")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -41,14 +41,14 @@ count = 0
 
 
 ##### CHANGE EXCEL PATH HERE #####
-excelPath = os.path.join(path, 'touki/touki_Tochigi11.xlsx')
+excelPath = os.path.join(path, 'touki.xlsx')
 # dataframes
-df=pd.read_excel(excelPath, 'script2 ', names=['text','#'])
+df=pd.read_excel(excelPath, 'script1 ', names=['pre', 'text','#'])
 
 #error list
 error_list = []
 #error .txt
-with open(os.path.join(path, "touki/touki_error.txt"), 'a', encoding="utf-8") as f:
+with open(os.path.join(path, "Logs/touki_error.txt"), 'a', encoding="utf-8") as f:
     f.write("\n" + time.strftime("%B %d, %Y %H:%M:%S"))
 
 # chrome options !Remember to set options to YOUR profile (chrome://version)
@@ -83,6 +83,7 @@ realEstate.click()
 
 ### BILLING PAGE ###
 for i, row in df.iterrows():
+    r = row['pre']
     t = row['text']
     n = row['#']
     tn = t + " " + n
@@ -90,10 +91,8 @@ for i, row in df.iterrows():
     
     log.info('Starting(' + str(count) + '): ' + tn)
 
-#########################################
-##### SELECT STATE HERE ~/option[x] #####
-#########################################
-    selectState = WebDriverWait(driver, 20).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="fuTodofukenShozai"]/optgroup[3]/option[2]')))
+    # select prefecture 
+    selectState = driver.find_element(By.XPATH, '//*[@id="fuTodofukenShozai"]/optgroup/*[contains(text(), "{}")]'.format(r))
     selectState.click()
     # check input manually
     checkManual = driver.find_element(By.XPATH, '//*[@id="fuShozaiChokusetuNyuryoku"]').click()
@@ -114,7 +113,7 @@ for i, row in df.iterrows():
     confirmButton = driver.find_element(By.XPATH, '//*[@id="tabsFudosan"]/div[5]/button[2]')
     confirmButton.click()
 
-    ### LIST PAGE ###
+### LIST PAGE ###
     try:
         checkListItem = WebDriverWait(driver, 1).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="sentaku_1"]')))
         checkListItem.click()
@@ -154,7 +153,7 @@ for i, row in df.iterrows():
     except TimeoutException:
         log.warning('ADDRESS NOT FOUND: ' + tn)
         # append tn to error.txt
-        with open(os.path.join(path, "touki/touki_error.txt"), 'a', encoding="utf-8") as f:
+        with open(os.path.join(path, "Logs/touki_error.txt"), 'a', encoding="utf-8") as f:
             f.write("\n" + tn)
         
         # add failed address to list
@@ -165,11 +164,6 @@ for i, row in df.iterrows():
 
 # log list of addresses not found
 log.info(str(len(error_list)) + ' Addresses NOT found: ' + str(error_list))
-
-# nf = pd.DataFrame(error_list)
-# excelErrorPath = os.path.join(path, 'touki/touki_error.xlsx')
-# nf.to_excel(excelErrorPath)
-# log.info(nf)
 
 # elasped time 
 end = time.time()
