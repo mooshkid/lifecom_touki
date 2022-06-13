@@ -2,7 +2,7 @@
 
 This project is for Life Communications Sales Department - Touki
 
-This repository includes python scripts to download realestate details from a website, extract the necessary information, and then find zipcodes through [Google Maps](https://www.maps.goole.com/).
+This repository includes python scripts to download realestate details from a website, extract the necessary information, and then find zipcodes through [Google Maps](https://maps.google.com/).
 
 ### Dependencies
 
