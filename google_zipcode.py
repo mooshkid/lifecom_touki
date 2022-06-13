@@ -7,10 +7,10 @@ from selenium.common.exceptions import ElementNotInteractableException
 from selenium.common.exceptions import TimeoutException
 import pandas as pd
 import time
-
+import re
 
 #dataframes
-df = pd.read_excel('02_data.xlsx')
+df = pd.read_excel('test.xlsx')
 
 # address list 
 address_list = df['所有者住所'].tolist()
@@ -19,6 +19,9 @@ print(address_list)
 
 # zip code list 
 zip_list = []
+
+
+
 
 # driver 
 options = webdriver.ChromeOptions()
@@ -44,14 +47,27 @@ for i in address_list:
     try:
         # zip code 
         zipCode = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.XPATH, '/html/body/div[3]/div[9]/div[9]/div/div/div[1]/div[2]/div/div[1]/div/div/div[2]/div[1]/div[1]/div[1]/h1/span[1]')))
-        zipCode = str(zipCode.text)[:9]
 
-        print(zipCode)
-        zip_list.append(zipCode)
+        print(str(zipCode.text))
 
-        with open('zip_list.txt', 'a', encoding="utf-8") as f:
-            f.write("\n" + zipCode)
+        # japan zip code regex
+        pattern = re.compile(r"〒[0-9]{3}-[0-9]{4}")
 
+        match = pattern.match(zipCode.text)
+
+        if match:
+            print(match.group())
+            zip_list.append(match.group())
+
+            with open('zip_list.txt', 'a', encoding="utf-8") as f:
+                f.write("\n" + match.group())
+
+        else:
+            print('blank')
+            zip_list.append('blank')
+
+            with open('zip_list.txt', 'a', encoding="utf-8") as f:
+                f.write("\n" + "blank")
 
     except TimeoutException:
         print('blank')
@@ -62,5 +78,7 @@ for i in address_list:
 
         
 df['zip'] = zip_list
-df.to_excel('02_data.xlsx')
-print(df)
+df.to_excel('results.xlsx', index=False)
+print('Completed')
+
+driver.close()
