@@ -11,8 +11,11 @@ import os
 import sys
 import logging
 
-# logging config
+
+# change cwd to the script directory 
+os.chdir(os.path.dirname(__file__))
 path = os.getcwd()
+# logging config
 logPath = os.path.join(path, "Logs/touki.log")
 
 logging.basicConfig(

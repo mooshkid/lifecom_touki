@@ -153,7 +153,7 @@ for i, row in df.iterrows():
         df2 = pd.DataFrame(error_list, index=[0])
 
         # append df2 to df3 
-        df3.append(df2, ignore_index=True)
+        df3 = df3.append(df2, ignore_index=True)
         # write to excel 
         df3.to_excel('output.xlsx')
 
